@@ -27,9 +27,9 @@ you will get json array of passwords.
 
 # Usage
 
-- `curl -H "Authorization: Bearer my-app-key" "http://localhost:1337/simple?len=10&cnt=10"`
-- `curl -H "Authorization: Bearer my-app-key" "http://localhost:1337/smart?len=10&cnt=10"`
-- `curl -H "Accept: application/json" -H "Authorization: Bearer my-app-key" "http://localhost:1337/smart?len=10&cnt=10"`
+- `curl -H "Authorization: Bearer my-app-key" "http://localhost:1337/simple?len=10&num=10"`
+- `curl -H "Authorization: Bearer my-app-key" "http://localhost:1337/smart?len=10&num=10"`
+- `curl -H "Accept: application/json" -H "Authorization: Bearer my-app-key" "http://localhost:1337/smart?len=10&num=10"`
 
 # License
 
