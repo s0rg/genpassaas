@@ -1,0 +1,15 @@
+linters-settings:
+  gocritic:
+    disabled-checks:
+      - singleCaseSwitch
+    enabled-tags:
+      - performance
+  maligned:
+    suggest-new: true
+
+linters:
+  enable-all: true
+  disable:
+    - gochecknoglobals 
+  fast: false
+
