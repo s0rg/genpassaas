@@ -10,6 +10,13 @@ linters-settings:
 linters:
   enable-all: true
   disable:
-    - gochecknoglobals 
+    - gochecknoglobals
+    - exhaustivestruct
+    - gomnd
+    - golint
+    - gofumpt
+    - maligned
+    - scopelint
+    - forbidigo
+    - interfacer
   fast: false
-

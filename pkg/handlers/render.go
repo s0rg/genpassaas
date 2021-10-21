@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -11,7 +12,7 @@ const (
 	mimeJSON = "application/json"
 )
 
-func renderTEXT(w http.ResponseWriter, body []string) (err error) {
+func renderTEXT(w http.ResponseWriter, body []string) error {
 	var buf bytes.Buffer
 
 	for i := 0; i < len(body); i++ {
@@ -20,15 +21,22 @@ func renderTEXT(w http.ResponseWriter, body []string) (err error) {
 	}
 
 	w.Header().Set("Content-Type", mimeTEXT)
-	_, err = buf.WriteTo(w)
 
-	return
+	if _, err := buf.WriteTo(w); err != nil {
+		return fmt.Errorf("write: %w", err)
+	}
+
+	return nil
 }
 
 func renderJSON(w http.ResponseWriter, body []string) error {
 	w.Header().Set("Content-Type", mimeJSON)
 
-	return json.NewEncoder(w).Encode(body)
+	if err := json.NewEncoder(w).Encode(body); err != nil {
+		return fmt.Errorf("encode: %w", err)
+	}
+
+	return nil
 }
 
 func RenderStrings(w http.ResponseWriter, r *http.Request, body []string) error {

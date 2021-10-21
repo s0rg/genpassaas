@@ -10,6 +10,7 @@ func GET(next http.HandlerFunc) http.HandlerFunc {
 		if r.Method != http.MethodGet {
 			code := http.StatusMethodNotAllowed
 			http.Error(w, http.StatusText(code), code)
+
 			return
 		}
 
@@ -28,21 +29,25 @@ func BearerAuth(key string, next http.HandlerFunc) http.HandlerFunc {
 
 		if auth = r.Header.Get("Authorization"); auth == "" {
 			http.Error(w, "Auth header missing", http.StatusUnauthorized)
+
 			return
 		}
 
 		if parts = strings.Fields(auth); len(parts) != 2 {
 			http.Error(w, "Auth header malformed", http.StatusUnauthorized)
+
 			return
 		}
 
 		if !strings.EqualFold(parts[0], bearerName) {
 			http.Error(w, "Auth header invalid type - not a bearer!", http.StatusUnauthorized)
+
 			return
 		}
 
 		if parts[1] != key {
 			http.Error(w, "Invalid bearer token", http.StatusForbidden)
+
 			return
 		}
 
