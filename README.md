@@ -1,5 +1,10 @@
 [![Build](https://github.com/s0rg/genpassaas/workflows/ci/badge.svg)](https://github.com/s0rg/genpassaas/actions?query=workflow%3Aci)
 [![Go Report Card](https://goreportcard.com/badge/github.com/s0rg/genpassaas)](https://goreportcard.com/report/github.com/s0rg/genpassaas)
+[![Maintainability](https://api.codeclimate.com/v1/badges/56ca218b8a8d6940427a/maintainability)](https://codeclimate.com/github/s0rg/genpassaas/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/56ca218b8a8d6940427a/test_coverage)](https://codeclimate.com/github/s0rg/genpassaas/test_coverage)
+
+[![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](https://github.com/s0rg/genpassaas/blob/main/LICENSE)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/s0rg/genpassaas)](go.mod)
 
 # Generate Password as a Service
 
