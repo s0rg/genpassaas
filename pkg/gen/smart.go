@@ -1,17 +1,13 @@
 package gen
 
+import "strings"
+
 type role byte
 
 const (
-	vow role = 1
-	con role = 2
+	con role = iota
+	vow
 )
-
-var defaultRoles = []role{vow, con}
-
-func randomRole() role {
-	return defaultRoles[mustRandInt(len(defaultRoles))]
-}
 
 type rule struct {
 	l, r role
@@ -19,27 +15,40 @@ type rule struct {
 
 type rules []rule
 
+var defaultRoles = []role{
+	con,
+	vow,
+}
+
 var defaultRules = rules{
 	rule{vow, con},
 	rule{con, vow},
 	rule{vow, vow},
 }
 
-func (rls rules) getNext(r role) role {
-	var (
-		match []*rule
-		idx   int
-	)
+func randomRole() role {
+	return defaultRoles[mustRandInt(len(defaultRoles))]
+}
 
+func (rls rules) matches(r role) (rv []*rule, ok bool) {
 	for i := 0; i < len(rls); i++ {
 		if rul := &rls[i]; rul.l == r {
-			match = append(match, rul)
+			rv = append(rv, rul)
 		}
 	}
 
-	switch c := len(match); c {
-	case 0:
+	return rv, len(rv) > 0
+}
+
+func (rls rules) getNext(r role) (rv role) {
+	var idx int
+
+	match, ok := rls.matches(r)
+	if !ok {
 		return randomRole()
+	}
+
+	switch c := len(match); c {
 	case 1:
 		// idx still 0
 	default:
@@ -54,23 +63,23 @@ type char struct {
 	c []byte
 }
 
-func (c char) getByte() byte {
+func (c *char) getByte() byte {
 	return c.c[mustRandInt(len(c.c))]
 }
 
 var defaultAlphabet = []char{
-	{vow, []byte("aA4@")},
+	{vow, []byte("aA4")},
 	{con, []byte("bB8")},
-	{con, []byte("cC(")},
-	{con, []byte("dD)")},
+	{con, []byte("cC")},
+	{con, []byte("dD")},
 	{vow, []byte("eE3")},
 	{con, []byte("fF")},
 	{con, []byte("gG6")},
-	{con, []byte("hH#")},
-	{vow, []byte("iI!")},
-	{con, []byte("jJ]")},
+	{con, []byte("hH")},
+	{vow, []byte("iI")},
+	{con, []byte("jJ")},
 	{con, []byte("kK")},
-	{con, []byte("lL1|")},
+	{con, []byte("lL1")},
 	{con, []byte("mM")},
 	{con, []byte("nN")},
 	{vow, []byte("oO0")},
@@ -89,13 +98,8 @@ var defaultAlphabet = []char{
 
 type chars []*char
 
-func (c chars) Len() int {
-	return len(c)
-}
-
-func (c chars) Swap(i, j int) {
-	c[i], c[j] = c[j], c[i]
-}
+func (c chars) Len() int      { return len(c) }
+func (c chars) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
 type charBuf map[role]chars
 
@@ -127,18 +131,18 @@ func buildCharBuf() charBuf {
 	return cb
 }
 
-func Smart(length int) string {
+func Smart(length int) (rv string) {
 	var (
-		pass    []byte
-		chars   = buildCharBuf()
+		sb      strings.Builder
 		rules   = defaultRules
+		chars   = buildCharBuf()
 		curRole = randomRole()
 	)
 
-	for len(pass) < length {
-		pass = append(pass, chars.getByte(curRole))
+	for sb.Len() < length {
+		_ = sb.WriteByte(chars.getByte(curRole))
 		curRole = rules.getNext(curRole)
 	}
 
-	return string(pass)
+	return sb.String()
 }

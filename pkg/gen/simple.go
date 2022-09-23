@@ -1,8 +1,8 @@
 package gen
 
-import (
-	"bytes"
-)
+import "bytes"
+
+const simpleAlphabetBlocks = 3
 
 var (
 	alphaLower = []byte("abcdefghijklmnopqrstuvwxyz")
@@ -15,16 +15,11 @@ var (
 
 type bytesSwapper []byte
 
-func (c bytesSwapper) Len() int {
-	return len(c)
-}
+func (c bytesSwapper) Len() int      { return len(c) }
+func (c bytesSwapper) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
-func (c bytesSwapper) Swap(i, j int) {
-	c[i], c[j] = c[j], c[i]
-}
-
-func Simple(length int) string {
-	alphabetSize := len(alphaLower) * 3
+func Simple(length int) (rv string) {
+	alphabetSize := len(alphaLower) * simpleAlphabetBlocks
 
 	alphabet := make([]byte, 0, alphabetSize)
 

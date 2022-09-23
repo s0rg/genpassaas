@@ -1,22 +1,35 @@
+run:
+  go: '1.19'
+
 linters-settings:
   gocritic:
-    disabled-checks:
-      - singleCaseSwitch
     enabled-tags:
       - performance
-  maligned:
-    suggest-new: true
+      - diagnostic
+      - style
+      - opinionated
 
 linters:
   enable-all: true
   disable:
     - gochecknoglobals
     - exhaustivestruct
-    - gomnd
-    - golint
-    - gofumpt
-    - maligned
-    - scopelint
+    - nonamedreturns
+    - testpackage
+    - exhaustruct
+    - varnamelen
     - forbidigo
-    - interfacer
+    - gofumpt
   fast: false
+
+output:
+  format: 'colored-line-number'
+  print-issued-lines: true
+  print-linter-name: true
+
+issues:
+  exclude-rules:
+    - path: ._test\.go
+      linters:
+        - unparam
+        - bodyclose
