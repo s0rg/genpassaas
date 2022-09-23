@@ -1,4 +1,4 @@
-package handlers
+package main
 
 import (
 	"bytes"
@@ -8,9 +8,23 @@ import (
 )
 
 const (
-	mimeTEXT = "text/plain"
-	mimeJSON = "application/json"
+	contentTypeHeader = "Content-Type"
+	acceptHeader      = "Accept"
+	mimeTEXT          = "text/plain"
+	mimeJSON          = "application/json"
 )
+
+func RenderStrings(
+	w http.ResponseWriter,
+	r *http.Request,
+	body []string,
+) error {
+	if r.Header.Get(acceptHeader) == mimeJSON {
+		return renderJSON(w, body)
+	}
+
+	return renderTEXT(w, body)
+}
 
 func renderTEXT(w http.ResponseWriter, body []string) error {
 	var buf bytes.Buffer
@@ -20,7 +34,7 @@ func renderTEXT(w http.ResponseWriter, body []string) error {
 		buf.WriteString("\n")
 	}
 
-	w.Header().Set("Content-Type", mimeTEXT)
+	w.Header().Set(contentTypeHeader, mimeTEXT)
 
 	if _, err := buf.WriteTo(w); err != nil {
 		return fmt.Errorf("write: %w", err)
@@ -30,19 +44,11 @@ func renderTEXT(w http.ResponseWriter, body []string) error {
 }
 
 func renderJSON(w http.ResponseWriter, body []string) error {
-	w.Header().Set("Content-Type", mimeJSON)
+	w.Header().Set(contentTypeHeader, mimeJSON)
 
 	if err := json.NewEncoder(w).Encode(body); err != nil {
 		return fmt.Errorf("encode: %w", err)
 	}
 
 	return nil
-}
-
-func RenderStrings(w http.ResponseWriter, r *http.Request, body []string) error {
-	if r.Header.Get("Accept") == mimeJSON {
-		return renderJSON(w, body)
-	}
-
-	return renderTEXT(w, body)
 }

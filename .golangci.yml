@@ -4,19 +4,17 @@ linters-settings:
       - singleCaseSwitch
     enabled-tags:
       - performance
-  maligned:
-    suggest-new: true
+      - diagnostic
+      - style
+      - opinionated
 
 linters:
   enable-all: true
   disable:
     - gochecknoglobals
     - exhaustivestruct
-    - gomnd
-    - golint
-    - gofumpt
-    - maligned
-    - scopelint
+    - exhaustruct
     - forbidigo
-    - interfacer
+    - varnamelen
+    - nonamedreturns
   fast: false

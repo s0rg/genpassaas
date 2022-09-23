@@ -5,35 +5,33 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/s0rg/genpassaas/pkg/config"
 	"github.com/s0rg/genpassaas/pkg/gen"
 )
 
-const appName = "GenPassaaS-cli"
+const appName = config.Name + "-cli"
 
 var (
-	GitHash   string
-	BuildDate string
 	version   = flag.Bool("version", false, "show version and exit")
 	generator = flag.String("gen", "smart", "generator 'smart' or 'simple'")
-	length    = flag.Int("len", 16, "length of each password")
-	count     = flag.Int("count", 5, "count of passwords")
+	length    = flag.Int("len", config.DefaultLength, "length of each password")
+	count     = flag.Int("count", config.DefaultCount, "count of passwords")
 )
 
-func myVersion() (v string) {
-	return fmt.Sprintf("%s %s [build at %s]", appName, GitHash, BuildDate)
-}
+func generate(kind string, length, count int) (rv []string) {
+	var fn gen.Fn
 
-func generate(genkind string, length, count int) (rv []string) {
-	genfn := gen.Simple
-
-	if genkind == "smart" {
-		genfn = gen.Smart
+	switch kind {
+	case "smart":
+		fn = gen.Smart
+	default:
+		fn = gen.Simple
 	}
 
 	rv = make([]string, count)
 
 	for i := 0; i < count; i++ {
-		rv[i] = genfn(length)
+		rv[i] = fn(length)
 	}
 
 	return rv
@@ -43,10 +41,15 @@ func main() {
 	flag.Parse()
 
 	if *version {
-		fmt.Println(myVersion())
+		fmt.Printf("%s %s\n", appName, config.Version())
 
 		return
 	}
 
-	fmt.Println(strings.Join(generate(*generator, *length, *count), "\n"))
+	fmt.Println(strings.Join(
+		generate(
+			*generator,
+			config.ClampLength(*length),
+			config.ClampCount(*count),
+		), "\n"))
 }
