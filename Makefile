@@ -17,13 +17,13 @@ LDFLAGS=-w -s \
 		-X ${VER_PKG}.GitHash=${GIT_HASH} \
 		-X ${VER_PKG}.BuildDate=${BUILD_AT}
 
-cli: test
+cli: lint test
 	go build -ldflags "${LDFLAGS}" -o "${BIN_CLI}" "${CMD_CLI}"
 
-api: test
+api: lint test
 	go build -ldflags "${LDFLAGS}" -o "${BIN_API}" "${CMD_API}"
 
-docker: test
+docker: lint test
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "${LDFLAGS}" -o "${BIN_API}" "${CMD_API}"
 	docker build -t s0rg/genpassaas:latest --no-cache=true .
 
@@ -33,7 +33,7 @@ vet:
 lint: vet
 	golangci-lint run
 
-test: lint
+test: vet
 	go test -tags=test -race -count 1 -v -coverprofile="${COVER}" ./...
 
 test-cover: test
