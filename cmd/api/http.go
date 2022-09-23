@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	headerName = "Authorization"
+	headerAuth = "Authorization"
 	bearerName = "Bearer"
 )
 
@@ -37,7 +37,7 @@ func Bearer(key string, next http.HandlerFunc) http.HandlerFunc {
 			parts []string
 		)
 
-		if auth = r.Header.Get(headerName); auth == "" {
+		if auth = r.Header.Get(headerAuth); auth == "" {
 			http.Error(w, "Auth header missing", http.StatusUnauthorized)
 
 			return
