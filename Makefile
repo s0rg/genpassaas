@@ -1,17 +1,18 @@
 BIN_API=bin/genpass-api
-CMD_API=./cmd/genpass-api
+CMD_API=./cmd/api
 
 BIN_CLI=bin/genpass
-CMD_CLI=./cmd/genpass-cli
+CMD_CLI=./cmd/cli
 
-COVER=test.cover
+COVER=cover.out
 
-GIT_HASH=`git rev-parse --short HEAD`
-BUILD_DATE=`date +%FT%T%z`
+GIT_TAG=`git describe --abbrev=0 2>/dev/null || echo -n "no-tag"`
+GIT_HASH=`git rev-parse --short HEAD 2>/dev/null || echo -n "no-git"`
+BUILD_AT=`date +%FT%T%z`
 
 VER_PKG=github.com/s0rg/genpassaas/pkg/config
 
-LDFLAGS=-X ${VER_PKG}.GitHash=${GIT_HASH} -X ${VER_PKG}.BuildDate=${BUILD_DATE}
+LDFLAGS=-X ${VER_PKG}.GitTag=${GIT_TAG} -X ${VER_PKG}.GitHash=${GIT_HASH} -X ${VER_PKG}.BuildDate=${BUILD_AT}
 LDFLAGS_REL=-w -s ${LDFLAGS}
 
 .PHONY: clean cli
