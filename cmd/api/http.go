@@ -10,6 +10,11 @@ import (
 	"github.com/s0rg/genpassaas/pkg/gen"
 )
 
+const (
+	headerName = "Authorization"
+	bearerName = "Bearer"
+)
+
 func GET(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
@@ -23,12 +28,8 @@ func GET(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func BearerAuth(key string, next http.HandlerFunc) http.HandlerFunc {
-	const (
-		headerName  = "Authorization"
-		bearerName  = "bearer"
-		fieldsCount = 2
-	)
+func Bearer(key string, next http.HandlerFunc) http.HandlerFunc {
+	const fieldsCount = 2
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
@@ -65,20 +66,25 @@ func BearerAuth(key string, next http.HandlerFunc) http.HandlerFunc {
 }
 
 func withBearer(key string, fn gen.Fn) http.HandlerFunc {
-	return GET(BearerAuth(key, genHandler(fn)))
+	return GET(Bearer(key, genHandler(fn)))
 }
 
 func genHandler(fn gen.Fn) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		args := r.URL.Query()
-		count := config.ClampCount(
-			getIntParam(args.Get("num"), config.DefaultCount),
-		)
-		length := config.ClampLength(
-			getIntParam(args.Get("len"), config.DefaultLength),
-		)
+
+		count := config.ClampCount(getIntParam(
+			args.Get("num"),
+			config.DefaultCount,
+		))
+
+		length := config.ClampLength(getIntParam(
+			args.Get("len"),
+			config.DefaultLength,
+		))
 
 		result := make([]string, count)
+
 		for i := 0; i < count; i++ {
 			result[i] = fn(length)
 		}

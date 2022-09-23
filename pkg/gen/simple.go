@@ -1,8 +1,6 @@
 package gen
 
-import (
-	"bytes"
-)
+import "bytes"
 
 const simpleAlphabetBlocks = 3
 

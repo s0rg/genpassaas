@@ -30,21 +30,25 @@ func randomRole() role {
 	return defaultRoles[mustRandInt(len(defaultRoles))]
 }
 
-func (rls rules) getNext(r role) role {
-	var (
-		match []*rule
-		idx   int
-	)
-
+func (rls rules) matches(r role) (rv []*rule, ok bool) {
 	for i := 0; i < len(rls); i++ {
 		if rul := &rls[i]; rul.l == r {
-			match = append(match, rul)
+			rv = append(rv, rul)
 		}
 	}
 
-	switch c := len(match); c {
-	case 0:
+	return rv, len(rv) > 0
+}
+
+func (rls rules) getNext(r role) (rv role) {
+	var idx int
+
+	match, ok := rls.matches(r)
+	if !ok {
 		return randomRole()
+	}
+
+	switch c := len(match); c {
 	case 1:
 		// idx still 0
 	default:

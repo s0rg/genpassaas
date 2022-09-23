@@ -1,3 +1,3 @@
 module github.com/s0rg/genpassaas
 
-go 1.13
+go 1.19

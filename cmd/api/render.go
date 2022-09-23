@@ -17,36 +17,36 @@ const (
 func RenderStrings(
 	w http.ResponseWriter,
 	r *http.Request,
-	body []string,
+	s []string,
 ) error {
 	if r.Header.Get(acceptHeader) == mimeJSON {
-		return renderJSON(w, body)
+		return renderJSON(w, s)
 	}
 
-	return renderTEXT(w, body)
+	return renderTEXT(w, s)
 }
 
-func renderTEXT(w http.ResponseWriter, body []string) error {
-	var buf bytes.Buffer
+func renderTEXT(w http.ResponseWriter, s []string) error {
+	var b bytes.Buffer
 
-	for i := 0; i < len(body); i++ {
-		buf.WriteString(body[i])
-		buf.WriteString("\n")
+	for i := 0; i < len(s); i++ {
+		b.WriteString(s[i])
+		b.WriteString("\n")
 	}
 
 	w.Header().Set(contentTypeHeader, mimeTEXT)
 
-	if _, err := buf.WriteTo(w); err != nil {
+	if _, err := b.WriteTo(w); err != nil {
 		return fmt.Errorf("write: %w", err)
 	}
 
 	return nil
 }
 
-func renderJSON(w http.ResponseWriter, body []string) error {
+func renderJSON(w http.ResponseWriter, s []string) error {
 	w.Header().Set(contentTypeHeader, mimeJSON)
 
-	if err := json.NewEncoder(w).Encode(body); err != nil {
+	if err := json.NewEncoder(w).Encode(s); err != nil {
 		return fmt.Errorf("encode: %w", err)
 	}
 

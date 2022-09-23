@@ -1,7 +1,8 @@
+run:
+  go: '1.19'
+
 linters-settings:
   gocritic:
-    disabled-checks:
-      - singleCaseSwitch
     enabled-tags:
       - performance
       - diagnostic
@@ -13,8 +14,22 @@ linters:
   disable:
     - gochecknoglobals
     - exhaustivestruct
-    - exhaustruct
-    - forbidigo
-    - varnamelen
     - nonamedreturns
+    - testpackage
+    - exhaustruct
+    - varnamelen
+    - forbidigo
+    - gofumpt
   fast: false
+
+output:
+  format: 'colored-line-number'
+  print-issued-lines: true
+  print-linter-name: true
+
+issues:
+  exclude-rules:
+    - path: ._test\.go
+      linters:
+        - unparam
+        - bodyclose
