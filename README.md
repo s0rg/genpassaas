@@ -1,3 +1,4 @@
+[![Build](https://github.com/s0rg/genpassaas/workflows/ci/badge.svg)](https://github.com/s0rg/genpassaas/actions?query=workflow%3Aci)
 [![Go Report Card](https://goreportcard.com/badge/github.com/s0rg/genpassaas)](https://goreportcard.com/report/github.com/s0rg/genpassaas)
 
 # Generate Password as a Service
