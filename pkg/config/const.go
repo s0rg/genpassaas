@@ -2,6 +2,7 @@ package config
 
 const (
 	Name          = "GenPassaaS"
+	Site          = "https://github.com/s0rg/genpassaas"
 	MinCount      = 1
 	MinLength     = 6
 	MaxCount      = 64

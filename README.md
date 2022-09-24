@@ -10,6 +10,17 @@
 
 Microservice + cli example for password generation.
 
+# features
+
+- simple and clean design - `api` and `cli` share only password generation code, constants and version information
+- version (git and build date) information stored in binaries by Makefile
+- simplest Dockerfile - based on `scratch` image only
+- zero-dependencies
+- 95%+ test-covered codebase
+- `api` follows [12-factor](https://12factor.net/) methodology
+- `api` handlers take care of client `Accept` header value
+- feature-complete `cli` version
+
 ## microservice
 
 Exposes two endpoints, both can be called with GET and two params:
@@ -17,12 +28,11 @@ Exposes two endpoints, both can be called with GET and two params:
 - num - number of passwords to generate (default = 10, min = 1, max = 64).
 
 The endpoints are:
-- `/v1/simple` - shuffles his alphabet and than randomly picks chars from it. Passwords, generated via this endpoint is pretty strong, but hard to remember.
-- `/v1/smart` - tries to generate prononceable passwords (thereby easy to remember).
+- `/v1/simple` - shuffles alphabet and randomly picks chars from it. Passwords, generated with this endpoint is pretty strong, but hard to remember.
+- `/v1/smart` - generates prononceable (thereby easy to remember) passwords by repeating vowels and consonants with patterns.
 
 By default both endpoints answer is `text/plain` block with `num` passwords separated by single LF (`\n`) byte.
-This behavior can be changed via `Accept` header, if you set it to `application/json`,
-you will get json array of passwords.
+This behavior can be changed via `Accept` header, if you set it to `application/json`, you will get json array of passwords.
 
 ### environment
 
@@ -63,7 +73,3 @@ Usage of genpass [flags]:
 -version
     show version and exit
 ```
-
-# license
-
-MIT

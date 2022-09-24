@@ -9,5 +9,5 @@ var (
 )
 
 func Version() (rv string) {
-	return fmt.Sprintf("%s-%s [build at %s]", GitTag, GitHash, BuildDate)
+	return fmt.Sprintf("%s-%s build at: %s site: %s", GitTag, GitHash, BuildDate, Site)
 }
